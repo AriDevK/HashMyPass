@@ -1,7 +1,58 @@
 ﻿@page "/"
+@using HashMyPass.Services
+@using HashMyPass.Forms
+@inject IHashServices Hash
 
 <PageTitle>Home</PageTitle>
+<MudText Typo="Typo.h3" Color="Color.Primary" Class="d-inline">Hash my Pass</MudText>
 
-<h1>Hello, world!</h1>
+<MudGrid>
+    <MudItem sm="7" Class="mt-5">
+        <EditForm Model="_form" OnValidSubmit="OnFormSubmit">
+            <DataAnnotationsValidator/>
+            <MudPaper Class="pa-4">
+                <MudSelect @bind-Value="_form.Algorithm" Label="Algorithm" Placeholder="Please Select" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Lock" AdornmentColor="Color.Primary" Class="mb-2">
+                    <MudSelectItem Value="@("MD5")">MD5</MudSelectItem>
+                    <MudSelectItem Value="@("SHA1")">SHA1</MudSelectItem>
+                    <MudSelectItem Value="@("SHA256")">SHA256</MudSelectItem>
+                    <MudSelectItem Value="@("SHA512")">SHA512</MudSelectItem>
+                    <MudSelectItem Value="@("Base64")">Base64</MudSelectItem>
+                </MudSelect>
+                <MudTextField T="string" Label="Text" For="@(() => _form.Text!)" @bind-Value="_form.Text" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Outlined.Key" AdornmentColor="Color.Primary" Class="mb-2"/>
+                <MudGrid>
+                    <MudItem sm="8">
+                        <MudTextField T="string" Label="Salt" For="@(() => _form.Salt!)" @bind-Value="_form.Salt" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Outlined.Extension" AdornmentColor="Color.Primary"/>
+                    </MudItem>
+                    <MudItem sm="4">
+                        <MudSelect @bind-Value="_form.SaltPosition" Label="Salt position" Placeholder="Please Select" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.FormatListNumbered" AdornmentColor="Color.Primary">
+                            <MudSelectItem Value="@("Prefix")">Prefix</MudSelectItem>
+                            <MudSelectItem Value="@("Suffix")">Suffix</MudSelectItem>
+                            <MudSelectItem Value="@("Both")">Both</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                </MudGrid>
+            </MudPaper>
+            <MudPaper Class="pa-4 mt-4" Elevation="0">
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Hash</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="mx-2" @onclick="() => _form = new HashingForm()">Reset</MudButton>
+            </MudPaper>
+        </EditForm>
+    </MudItem>
+    <MudItem sm="5">
+        <img class="float-avatar" src="images/ari_key.png" alt="girl holding a key"/>
+    </MudItem>
+</MudGrid>
 
-Welcome to your new app.
+
+@_hashedText
+
+@code{
+    private string? _hashedText;
+    private HashingForm _form = new HashingForm();
+
+    private void OnFormSubmit()
+    {
+        _hashedText = Hash.Sha256(_form.Text + _form.Salt);
+    }
+
+}
