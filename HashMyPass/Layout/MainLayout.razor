@@ -1,16 +1,26 @@
 ﻿@inherits LayoutComponentBase
-<div class="page">
-    <div class="sidebar">
-        <NavMenu/>
-    </div>
+<MudThemeProvider @bind-IsDarkMode="_isDark"/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
+<MudLayout>
+    <MudAppBar>
+        Hash My Pass
+        <MudSpacer />
+        <MudToggleIconButton @bind-Toggled="@_isDark"
+                             Icon="@Icons.Material.Filled.LightMode" Title="Off"
+                             ToggledIcon="@Icons.Material.Filled.DarkMode" ToggledTitle="On"/>
 
-        <article class="content px-4">
+    </MudAppBar>
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.Medium" Class="mt-5">
             @Body
-        </article>
-    </main>
-</div>
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+
+@code
+{
+    private bool _isDark = false;
+}
