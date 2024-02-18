@@ -2,7 +2,7 @@
 A web application to hash text using different algorithms and copy the result to the clipboard made with Blazor WebAssembly.
 
 
-<img align="center" src= "" width="1000px"/> 
+<img align="center" src= "https://github.com/AriDevK/HashMyPass/blob/master/assets/preview.gif" width="1000px"/> 
 
 
 ![C#](https://img.shields.io/badge/c%23-551DEF.svg?style=for-the-badge&logo=csharp&logoColor=white)
@@ -21,7 +21,6 @@ A web application to hash text using different algorithms and copy the result to
   - [Usage](#-usage)
   - [Installation](#-installation)
   - [Contribute](#-contribute)
-  - [Things to do - Contribute ideas](#-things-to-do---contribute-ideas)
   - [Screenshots](#-screenshots)
 
 <br>
@@ -66,7 +65,8 @@ You can contribute to the development or improvement of this app and it will be 
 
 
 ## 📷 Screenshots
-<img width= "480" src= ""/>
-<img width= "480" src= ""/>
-<img width= "480" src= ""/>
-<img width= "480" src= ""/>
+<img width= "480" src= "https://github.com/AriDevK/HashMyPass/blob/master/assets/sc_home.jpeg"/>
+<img width= "480" src= "https://github.com/AriDevK/HashMyPass/blob/master/assets/sc_result.jpeg"/>
+<img width= "480" src= "https://github.com/AriDevK/HashMyPass/blob/master/assets/sc_notfound.jpeg"/>
+<img width= "480" src= "https://github.com/AriDevK/HashMyPass/blob/master/assets/sc_home_dark.jpeg"/>
+<img width= "480" src= "https://github.com/AriDevK/HashMyPass/blob/master/assets/sc_notfound_dark.jpeg"/>
