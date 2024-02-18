@@ -1,11 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using HashMyPass.Services;
 
 namespace HashMyPass.Forms;
 
 public class HashingForm
 {
     [Required]
-    public string? Algorithm { get; set; }
+    public HashAlgorithm Algorithm { get; set; }
     
     [Required]
     public string? Text { get; set; }

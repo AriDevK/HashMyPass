@@ -1,12 +1,17 @@
 ﻿@inherits LayoutComponentBase
-<MudThemeProvider @bind-IsDarkMode="_isDark"/>
-<MudDialogProvider/>
+<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="_isDark"/>
+<MudDialogProvider
+    FullWidth="true"
+    MaxWidth="MaxWidth.Small"
+    CloseButton="true"
+    Position="DialogPosition.Center"
+    CloseOnEscapeKey="true"/>
 <MudSnackbarProvider/>
 
 <MudLayout>
     <MudAppBar>
-        Hash My Pass
-        <MudSpacer />
+        <MudSpacer/>
+        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Default" aria-label="github"></MudIconButton>
         <MudToggleIconButton @bind-Toggled="@_isDark"
                              Icon="@Icons.Material.Filled.LightMode" Title="Off"
                              ToggledIcon="@Icons.Material.Filled.DarkMode" ToggledTitle="On"/>
@@ -16,6 +21,7 @@
         <MudContainer MaxWidth="MaxWidth.Large" Class="mt-5">
             @Body
         </MudContainer>
+        <span id="footer">made with ❤ and Blazor</span>
     </MudMainContent>
 </MudLayout>
 
@@ -23,4 +29,14 @@
 @code
 {
     private bool _isDark = false;
+    private MudThemeProvider _mudThemeProvider;
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _isDark = await _mudThemeProvider.GetSystemPreference();
+            StateHasChanged();
+        }
+    }
 }

@@ -1,30 +1,33 @@
 ﻿@page "/"
-@using HashMyPass.Services
 @using HashMyPass.Forms
-@inject IHashServices Hash
+@using HashMyPass.Componentes
+@using HashMyPass.Services
+@inject IDialogService DialogService
 
 <PageTitle>Home</PageTitle>
-<MudText Typo="Typo.h3" Color="Color.Primary" Class="d-inline">Hash my Pass</MudText>
+<span id="title">Hash my Pass</span>
 
 <MudGrid>
     <MudItem sm="7" Class="mt-5">
         <EditForm Model="_form" OnValidSubmit="OnFormSubmit">
             <DataAnnotationsValidator/>
             <MudPaper Class="pa-4">
-                <MudSelect @bind-Value="_form.Algorithm" Label="Algorithm" Placeholder="Please Select" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Lock" AdornmentColor="Color.Primary" Class="mb-2">
-                    <MudSelectItem Value="@("MD5")">MD5</MudSelectItem>
-                    <MudSelectItem Value="@("SHA1")">SHA1</MudSelectItem>
-                    <MudSelectItem Value="@("SHA256")">SHA256</MudSelectItem>
-                    <MudSelectItem Value="@("SHA512")">SHA512</MudSelectItem>
-                    <MudSelectItem Value="@("Base64")">Base64</MudSelectItem>
+                <MudSelect T="HashAlgorithm" @bind-Value="_form.Algorithm" Label="Algorithm" Placeholder="Please Select" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Lock" AdornmentColor="Color.Primary" Class="mb-2">
+                    <MudSelectItem Value="@(HashAlgorithm.Sha1)">SHA1</MudSelectItem>
+                    <MudSelectItem Value="@(HashAlgorithm.Sha256)">SHA256</MudSelectItem>
+                    <MudSelectItem Value="@(HashAlgorithm.Sha384)">SHA384</MudSelectItem>
+                    <MudSelectItem Value="@(HashAlgorithm.Sha512)">SHA512</MudSelectItem>
+                    <MudSelectItem Value="@(HashAlgorithm.Base64)">Base64</MudSelectItem>
                 </MudSelect>
                 <MudTextField T="string" Label="Text" For="@(() => _form.Text!)" @bind-Value="_form.Text" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Outlined.Key" AdornmentColor="Color.Primary" Class="mb-2"/>
                 <MudGrid>
                     <MudItem sm="8">
-                        <MudTextField T="string" Label="Salt" For="@(() => _form.Salt!)" @bind-Value="_form.Salt" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Outlined.Extension" AdornmentColor="Color.Primary"/>
+                        <MudTextField T="string" Label="Salt" For="@(() => _form.Salt!)" @bind-Value="_form.Salt" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Outlined.Refresh" AdornmentColor="Color.Primary" OnAdornmentClick="GenerateSalt" OnKeyUp="OnSaltChange"/>
+                        <span class="text-muted" style="font-size: small">Click on the refresh icon to generate randomly</span>
                     </MudItem>
                     <MudItem sm="4">
                         <MudSelect @bind-Value="_form.SaltPosition" Label="Salt position" Placeholder="Please Select" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.FormatListNumbered" AdornmentColor="Color.Primary">
+                            <MudSelectItem Value="@("")" hidden="true"></MudSelectItem>
                             <MudSelectItem Value="@("Prefix")">Prefix</MudSelectItem>
                             <MudSelectItem Value="@("Suffix")">Suffix</MudSelectItem>
                             <MudSelectItem Value="@("Both")">Both</MudSelectItem>
@@ -33,8 +36,8 @@
                 </MudGrid>
             </MudPaper>
             <MudPaper Class="pa-4 mt-4" Elevation="0">
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Hash</MudButton>
-                <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="mx-2" @onclick="() => _form = new HashingForm()">Reset</MudButton>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true">Hash</MudButton>
+                <MudButton Variant="Variant.Filled" Class="mt-3" Color="Color.Secondary" @onclick="() => _form = new HashingForm()" FullWidth="true">Reset</MudButton>
             </MudPaper>
         </EditForm>
     </MudItem>
@@ -44,15 +47,43 @@
 </MudGrid>
 
 
-@_hashedText
-
 @code{
-    private string? _hashedText;
     private HashingForm _form = new HashingForm();
 
     private void OnFormSubmit()
     {
-        _hashedText = Hash.Sha256(_form.Text + _form.Salt);
+        var options = new DialogOptions { ClassBackground = "my-custom-class" };
+        var parameters = new DialogParameters
+        {
+            { "Algorithm", _form.Algorithm },
+            { "Text", _form.Text },
+            { "Salt", _form.Salt },
+            { "SaltPosition", _form.SaltPosition }
+        };
+        DialogService.Show<ResultDialog>("Hashing result", parameters, options);
+    }
+
+    private void GenerateSalt()
+    {
+        _form.Salt = Guid.NewGuid().ToString();
+        var random = new Random();
+        var position = random.Next(0, 3);
+        _form.SaltPosition = position switch
+        {
+            0 => "Prefix",
+            1 => "Suffix",
+            _ => "Both"
+        };
+    }
+    
+    private void OnSaltChange(KeyboardEventArgs e)
+    {
+        if (string.IsNullOrEmpty(_form.Salt))
+        {
+            _form.SaltPosition = string.Empty;
+        }
+        
+        StateHasChanged();
     }
 
 }

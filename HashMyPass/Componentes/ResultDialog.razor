@@ -1,0 +1,55 @@
+@using HashMyPass.Services
+@inject IHashServices Hash
+@inject IJSRuntime JsRuntime
+@inject ISnackbar Snackbar
+
+<MudDialog>
+    <DialogContent>
+        <div class="d-flex flex-column py-1" style="align-items: center">
+            <img class="wink-avatar mb-2" src="images/ari_wink.png" alt="girl winking"/>
+            <MudAlert Severity="Severity.Normal" Style="width: 100%" NoIcon="true">
+                Original text: @Text <br>
+                Salt: @Salt
+            </MudAlert>
+            <MudAlert Severity="Severity.Info" Style="width: 100%; cursor: pointer" Icon="@Icons.Material.Filled.ContentCopy" OnClick="CopyToClipboard">
+                @_result
+            </MudAlert>
+            <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-4 mb-3">
+                If you like this project and want to support it, please give a ⭐️ on github
+            </MudText>
+        </div>  
+    </DialogContent>
+</MudDialog>
+
+
+
+
+
+
+@code {
+    [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
+    [Parameter] public HashAlgorithm Algorithm { get; set; }
+    [Parameter] public string? Text { get; set; }
+    [Parameter] public string? Salt { get; set; }
+    [Parameter] public string? SaltPosition { get; set; }
+
+    private string? _result;
+
+    protected override void OnInitialized()
+    {
+        var auxText = SaltPosition switch
+        {
+            "Prefix" => Salt + Text,
+            "Suffix" => Text + Salt,
+            _ => Salt + Text + Salt
+        };
+
+        _result = Hash.Encrypt(auxText, Algorithm);
+    }
+
+    private void CopyToClipboard()
+    {
+        JsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", _result);
+        Snackbar.Add("Hash copied to clipboard", Severity.Success);
+    }
+}

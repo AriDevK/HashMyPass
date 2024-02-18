@@ -1,16 +1,38 @@
-/* animate this class to bounce like if it is floating on the space from top to bottom */
+.wink-avatar {
+    width: 50%;
+}
+
 .float-avatar{
-    animation: float 4s infinite;
+    animation: float 4s infinite ease-in-out;
 }
 
 @keyframes float {
     0% {
-        transform: translateY(0);
+        transform: translateY(-60px);
     }
     60% {
-        transform: translateY(20px);
+        transform: translateY(0px);
     }
     100% {
-        transform: translateY(0);
+        transform: translateY(-60px);
     }
+}
+
+@font-face {
+    font-family: Bubbles;
+    src: url('../fonts/Bubble3D.ttf') format('truetype');
+}
+
+
+#title{
+    display: inline;
+    font-family: Bubbles;
+    font-size: 100px;
+}
+
+#footer{
+    position: fixed;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
 }
