@@ -27,7 +27,7 @@ A web application to hash text using different algorithms and copy the result to
 
 
 ## 🤖 Usage
-You can access to it on [pending]
+You can access to it on https://ambitious-moss-054db9c10.4.azurestaticapps.net/
 
 <br>
 
