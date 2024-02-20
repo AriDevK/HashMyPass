@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+
 <MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="_isDark"/>
 <MudDialogProvider
     FullWidth="true"
@@ -11,7 +12,12 @@
 <MudLayout>
     <MudAppBar>
         <MudSpacer/>
-        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Default" aria-label="github"></MudIconButton>
+        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" 
+                       Href="https://github.com/AriDevK/HashMyPass"
+                       Target="_blank"
+                       Color="Color.Default" 
+                       aria-label="github">
+        </MudIconButton>
         <MudToggleIconButton @bind-Toggled="@_isDark"
                              Icon="@Icons.Material.Filled.LightMode" Title="Off"
                              ToggledIcon="@Icons.Material.Filled.DarkMode" ToggledTitle="On"/>
