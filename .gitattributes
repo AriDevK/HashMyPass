@@ -1,0 +1,9 @@
+* linguist-vendored
+*.cs linguist-language=C#
+*.razor linguist-language=C#
+*.sln linguist-language=C#
+*.csproj linguist-language=C#
+*.js linguist-language=JavaScript
+*.css linguist-language=CSS
+Dockerfile linguist-language=Dockerfile
+.dockerignore linguist-language=Dockerfile
