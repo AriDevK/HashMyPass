@@ -27,7 +27,49 @@
 #title{
     display: inline;
     font-family: Bubbles;
-    font-size: 100px;
+}
+
+/* add media query for mobile devices */
+@media (max-width: 768px) {
+    #title{
+        font-size: 40px;
+        text-align: center;
+        display: block  !important;
+    }
+
+    .mud-grid{
+        display: block !important;
+    }
+
+    .float-avatar{
+        display: none;
+    }
+
+    #not_found{
+        width: 70%;
+    }
+}
+
+/* add media query for tablets */
+@media (min-width: 768px) and (max-width: 1024px) {
+    #title{
+        font-size: 70px;
+    }
+
+    #not_found{
+        width: 30%;
+    }
+}
+
+/* add media query for desktops */
+@media (min-width: 1024px) {
+    #title{
+        font-size: 100px;
+    }
+
+    #not_found{
+        width: 30%;
+    }
 }
 
 #footer{
